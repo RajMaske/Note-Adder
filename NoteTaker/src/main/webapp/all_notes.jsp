@@ -1,7 +1,8 @@
 
+<%@page import="java.text.DateFormat"%>
 <%@page import="java.util.Date"%>
 <%@page import="org.hibernate.Transaction"%>
-<%@page import="org.hibernate.Query"%>
+<%@page import="org.hibernate.query.Query"%>
 <%@page import="com.entities.Note"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
@@ -28,8 +29,8 @@
 <%
 Session session2=FactoryProvider.getFactory().openSession();
 Transaction transaction=session2.beginTransaction();
-Query q=session2.createQuery("from Note");
-List<Note> list=q.list();
+Query<Note> q=session2.createQuery("from Note", Note.class);
+List<Note> list=q.getResultList();
 
 
 for(Note note:list){
@@ -44,8 +45,10 @@ for(Note note:list){
     <p class="card-text"><%=note.getContent() %></p>
     <a href="DeleteServlet?note_id=<%=note.getId() %>" class="btn btn-danger">Delete</a>
     <a href="edit.jsp?note_id=<%=note.getId()%>" class="btn btn-primary">Update</a>
+   	
+    <%DateFormat dateFormat=DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG); %>
     
-    <p class="left-align"><%=note.getAddedDate().toLocaleString() %></p>
+    <p class="left-align"><%=dateFormat.format(note.getAddedDate()) %></p>
    
   </div>
 </div>
